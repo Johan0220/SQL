@@ -19,8 +19,15 @@ create table SanPham(
 create table NhanVien(
 	MaNV int primary key,
 	TenNV nvarchar(20) not null,
-	IDSP int not null, constraint fk_SP foreign key(IDSP) references SanPham(IDSP) on delete cascade
 )
+drop table QLSP
+alter table QLSP drop constraint fk_qlsp
+create table QLSP(
+	MaQL int primary key,
+	MaNV int not null, constraint fk_nvql foreign key(MaNV) references NhanVien(MaNV) on delete cascade,
+	IDSP int not null, constraint fk_qlsp foreign key(IDSP) references SanPham(IDSP) on delete cascade
+)
+
 alter table SanPham
 drop constraint fk_LoaiSP
 drop table SanPham
@@ -33,11 +40,7 @@ select * from NhanVien;
 select * from LoaiSP order by TenLoaiSP;
 select * from Nhanvien order by TenNV;
 select * from LoaiSP where MaLoaiSP = 'Z37E';
-select TenLoaiSP from LoaiSP  where IDLSP in
-	(select IDLSP from SanPham where IDSP in
-		(select IDSP from NhanVien where TenNV = 'Nguyễn Văn An')) order by TenLoaiSP desc;
-select sum(IDSP) from SanPham where IDLSP in 
-	(select IDLSP from LoaiSP where TenLoaiSP = 'true')
+
  
 
 
